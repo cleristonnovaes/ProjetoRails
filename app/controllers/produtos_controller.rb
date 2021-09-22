@@ -6,6 +6,7 @@ class ProdutosController < ApplicationController
 
     def new
         @produto = Produto.new
+        @departamentos = Departamento.all 
     end
 
     def busca
@@ -13,10 +14,18 @@ class ProdutosController < ApplicationController
         @produtos = Produto.where "nome like ?", "%#{@nome_a_buscar}%"
     end
 
+    def edit
+        id = params[:id]
+        @produto = Produto.find(id)
+        @departamentos = Departamento.all 
+        render :new
+    end
+
     def create
-        valores = params.require(:produto).permit :nome, :preco, :descricao, :quantidade
+        valores = params.require(:produto).permit :nome, :preco, :descricao, :quantidade, :departamento_id
         @produto = Produto.new valores
         if @produto.save
+            flash[:notice] = "Produto salvo com sucesso"
             redirect_to root_url
         else
             render :new

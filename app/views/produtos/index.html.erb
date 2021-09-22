@@ -1,5 +1,7 @@
 
-
+<% if flash[:notice] %>
+<div class="alert alert-success" role="alert"><%= flash[:notice] %></div>
+<% end %>
 
     <table class='table table-bordered'>
         <thead>
@@ -7,23 +9,10 @@
                 <th>Nome</th>
                 <th>Descrição</th>
                 <th>Preços</th>
-                <th>Quantidade</th>
             </tr>
         </thead>
         <tbody>
-            <%@produtosnome.each do |produto|%>
-            <tr>
-                <td><%= produto.nome %></td>
-                <td><%= produto.descricao %></td>  
-                <td><%= produto.preco %></td>  
-                <td><%= produto.quantidade %></td> 
-                <td><%= button_to "Remover", produto,
-                        method: :delete,
-                        class: "btn btn-danger",
-                        data: {confirm: "Ter certeza que deseja remover a #{produto.nome}?"} %>
-                </td>
-            </tr>
-            <%end%>
+            <%= render @produtosnome%>
         </tbody>
     </table>
 
@@ -33,18 +22,10 @@
                 <th>Nome</th>
                 <th>Descrição</th>
                 <th>Preços</th>
-                <th>Quantidade</th>
             </tr>
         </thead>
         <tbody>
-            <%@produtospreco.each do |produto|%>
-            <tr>
-                <td><%= produto.nome %></td>
-                <td><%= produto.descricao %></td>  
-                <td><%= produto.preco %></td>  
-                <td><%= produto.quantidade %></td>      
-            </tr>
-            <%end%>
+            <%= render @produtospreco%>
         </tbody>
     </table>
     <%= link_to "Criar novo produto", new_produto_path %>
