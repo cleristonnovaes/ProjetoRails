@@ -1,5 +1,9 @@
+<% @produto.errors.full_messages.each do |message| %>
 
-<%= form_for Produto.new do |f| %>
+    <div class="alert alert-danger" role="alert"><%= message %></div>
+<% end %>
+
+<%= form_for @produto do |f| %>
 
 <div class="form-group">   
     <%= f.label :nome%>
