@@ -1,4 +1,7 @@
 class ProdutosController < ApplicationController
+
+    before_action :set_produto, only: [:edit, :update, :destroy]
+
     def index
         @produtosnome = Produto.order(:nome).limit 5
         @produtospreco = Produto.order(:preco).limit 2
@@ -6,7 +9,7 @@ class ProdutosController < ApplicationController
 
     def new
         @produto = Produto.new
-        renderiza_new
+        renderiza :new
     end
 
     def busca
@@ -15,51 +18,51 @@ class ProdutosController < ApplicationController
     end
 
     def edit
-        set_produto
-        renderiza_new
+        renderiza :edit
         
     end
    
 
     def update
-        set_produto
-        valores = params.require(:produto).permit :nome, :preco, :descricao, :quantidade, :departamento_id
-        if @produto.update valores
+        if @produto.update produto_params
             flash[:notice] = "Produto atualizado com sucesso"
             redirect_to root_url
         else
-            renderiza_new
+            renderiza :edit
         end
     end
 
+    
 
     def create
-        valores = params.require(:produto).permit :nome, :preco, :descricao, :quantidade, :departamento_id
-        @produto = Produto.new valores
+        @produto = Produto.new produto_params
         if @produto.save
             flash[:notice] = "Produto salvo com sucesso"
             redirect_to root_url
         else
-            renderiza_new
+            renderiza :new
         end
     end
 
     def destroy
-        set_produto
         @produto.destroy
         redirect_to root_url
     end
 
     private
 
-    def renderiza_new
+    def renderiza(view)
         @departamentos = Departamento.all 
-        render :new
+        render view
     end
 
     def set_produto
         id = params[:id]
         @produto = Produto.find(id)
+    end
+
+    def produto_params
+        params.require(:produto).permit :nome, :preco, :descricao, :quantidade, :departamento_id
     end
 
 end
